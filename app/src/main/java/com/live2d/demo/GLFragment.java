@@ -162,11 +162,8 @@ public class GLFragment extends Fragment {
 
         button2.setOnClickListener(v -> {
             try {
+                JniBridgeJava.LoadModel("sizuku", "shizuku");
                 JniBridgeJava.LoadModel("Haru", "Haru");
-                JniBridgeJava.nativeEnableRandomMotion(false);
-                JniBridgeJava.nativeSetBreath("PARAM_BREATH".getBytes(StandardCharsets.UTF_8));
-                JniBridgeJava.nativeSetScale(1f);
-                GLRenderer.isLoad = true;
             } catch (Exception e) {
                 e.printStackTrace();
             }

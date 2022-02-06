@@ -74,6 +74,13 @@ public class JniBridgeJava {
 
     public static native void nativeSetCubismParams(byte[] id, float value);
 
+    public static native void nativeSetEyeBallX(byte[] id);
+    public static native void nativeSetEyeBallY(byte[] id);
+    public static native void nativeSetBodyAngleX(byte[] id);
+    public static native void nativeSetAngleX(byte[] id);
+    public static native void nativeSetAngleY(byte[] id);
+    public static native void nativeSetAngleZ(byte[] id);
+
     // Java -----------------------------------------------------------------
 
     private static final List<String> motions = new ArrayList<>();

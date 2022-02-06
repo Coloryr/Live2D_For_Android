@@ -22,6 +22,9 @@ static jclass g_JniBridgeJavaClass;
 static jmethodID g_LoadFileMethodId;
 static jmethodID g_OnLoadModelMethodId;
 
+#define class_name(F) Java_com_live2d_demo_JniBridgeJava_native##F
+#define class_name "com/live2d/demo/JniBridgeJava"
+
 JNIEnv *GetEnv()
 {
     JNIEnv *env = NULL;
@@ -40,7 +43,7 @@ jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved)
         return JNI_ERR;
     }
 
-    jclass clazz = env->FindClass("com/live2d/demo/JniBridgeJava");
+    jclass clazz = env->FindClass(class_name);
     g_JniBridgeJavaClass = reinterpret_cast<jclass>(env->NewGlobalRef(clazz));
     g_LoadFileMethodId = env->GetStaticMethodID(g_JniBridgeJavaClass, "LoadFile", "(Ljava/lang/String;)[B");
     g_OnLoadModelMethodId = env->GetStaticMethodID(g_JniBridgeJavaClass, "onLoadModel", "(Ljava/lang/String;)V");
@@ -76,10 +79,31 @@ void JniBridgeC::OnLoadModel(char *name)
     env->DeleteLocalRef(str_arg);
 }
 
+Csm::csmString ToString(JNIEnv *env, jbyteArray data)
+{
+    char *chars = NULL;
+    jbyte *bytes;
+    int chars_len;
+
+    bytes = env->GetByteArrayElements(data, 0);
+    chars_len = env->GetArrayLength(data);
+    chars = new char[chars_len + 1];
+    memset(chars, 0, chars_len + 1);
+    memcpy(chars, bytes, chars_len);
+    chars[chars_len] = 0;
+
+    Csm::csmString res = Csm::csmString(chars);
+
+    env->ReleaseByteArrayElements(data, bytes, 0);
+    delete[] chars;
+
+    return res;
+}
+
 extern "C"
 {
     JNIEXPORT void JNICALL
-    Java_com_live2d_demo_JniBridgeJava_nativeEnableRandomMotion(JNIEnv *env, jclass type, jboolean open)
+    class_name(EnableRandomMotion)(JNIEnv *env, jclass type, jboolean open)
     {
         LAppLive2DManager *l2d = LAppLive2DManager::GetInstance();
         LAppModel *model = l2d->GetModel();
@@ -90,35 +114,105 @@ extern "C"
     }
 
     JNIEXPORT void JNICALL
-    Java_com_live2d_demo_JniBridgeJava_nativeSetBreath(JNIEnv *env, jclass type, jbyteArray id)
+    class_name(SetEyeBallX)(JNIEnv *env, jclass type, jbyteArray id)
     {
         LAppLive2DManager *l2d = LAppLive2DManager::GetInstance();
         LAppModel *model = l2d->GetModel();
 
-        char *chars = NULL;
-        jbyte *bytes;
-        int chars_len;
-
-        bytes = env->GetByteArrayElements(id, 0);
-        chars_len = env->GetArrayLength(id);
-        chars = new char[chars_len + 1];
-        memset(chars, 0, chars_len + 1);
-        memcpy(chars, bytes, chars_len);
-        chars[chars_len] = 0;
-
-        Csm::csmString id1 = Csm::csmString(chars);
-
-        env->ReleaseByteArrayElements(id, bytes, 0);
-        delete[] chars;
+        Csm::csmString res = ToString(env, id);
 
         if (model)
         {
-            model->SetBreath(id1);
+            model->SetEyeBallX(res);
         }
     }
 
     JNIEXPORT void JNICALL
-    Java_com_live2d_demo_JniBridgeJava_nativeLoadModel(JNIEnv *env, jclass type, jbyteArray path, jbyteArray name)
+    class_name(SetEyeBallY)(JNIEnv *env, jclass type, jbyteArray id)
+    {
+        LAppLive2DManager *l2d = LAppLive2DManager::GetInstance();
+        LAppModel *model = l2d->GetModel();
+
+        Csm::csmString res = ToString(env, id);
+
+        if (model)
+        {
+            model->SetEyeBallY(res);
+        }
+    }
+
+    JNIEXPORT void JNICALL
+    class_name(SetBodyAngleX)(JNIEnv *env, jclass type, jbyteArray id)
+    {
+        LAppLive2DManager *l2d = LAppLive2DManager::GetInstance();
+        LAppModel *model = l2d->GetModel();
+
+        Csm::csmString res = ToString(env, id);
+
+        if (model)
+        {
+            model->SetBodyAngleX(res);
+        }
+    }
+
+    JNIEXPORT void JNICALL
+    class_name(SetAngleX)(JNIEnv *env, jclass type, jbyteArray id)
+    {
+        LAppLive2DManager *l2d = LAppLive2DManager::GetInstance();
+        LAppModel *model = l2d->GetModel();
+
+        Csm::csmString res = ToString(env, id);
+
+        if (model)
+        {
+            model->SetAngleX(res);
+        }
+    }
+
+    JNIEXPORT void JNICALL
+    class_name(SetAngleY)(JNIEnv *env, jclass type, jbyteArray id)
+    {
+        LAppLive2DManager *l2d = LAppLive2DManager::GetInstance();
+        LAppModel *model = l2d->GetModel();
+
+        Csm::csmString res = ToString(env, id);
+
+        if (model)
+        {
+            model->SetAngleY(res);
+        }
+    }
+
+    JNIEXPORT void JNICALL
+    class_name(SetAngleZ)(JNIEnv *env, jclass type, jbyteArray id)
+    {
+        LAppLive2DManager *l2d = LAppLive2DManager::GetInstance();
+        LAppModel *model = l2d->GetModel();
+
+        Csm::csmString res = ToString(env, id);
+
+        if (model)
+        {
+            model->SetAngleZ(res);
+        }
+    }
+
+    JNIEXPORT void JNICALL
+    class_name(SetBreath)(JNIEnv *env, jclass type, jbyteArray id)
+    {
+        LAppLive2DManager *l2d = LAppLive2DManager::GetInstance();
+        LAppModel *model = l2d->GetModel();
+
+        Csm::csmString res = ToString(env, id);
+
+        if (model)
+        {
+            model->SetBreath(res);
+        }
+    }
+
+    JNIEXPORT void JNICALL
+    class_name(LoadModel)(JNIEnv *env, jclass type, jbyteArray path, jbyteArray name)
     {
         LAppLive2DManager *l2d = LAppLive2DManager::GetInstance();
 
@@ -154,7 +248,7 @@ extern "C"
     }
 
     JNIEXPORT jbyteArray JNICALL
-    Java_com_live2d_demo_JniBridgeJava_nativeGetExpression(JNIEnv *env, jclass type, jint index)
+    class_name(GetExpression)(JNIEnv *env, jclass type, jint index)
     {
         LAppLive2DManager *l2d = LAppLive2DManager::GetInstance();
         LAppModel *model = l2d->GetModel();
@@ -170,7 +264,7 @@ extern "C"
     }
 
     JNIEXPORT jbyteArray JNICALL
-    Java_com_live2d_demo_JniBridgeJava_nativeGetMotion(JNIEnv *env, jclass type, jint index)
+    class_name(GetMotion)(JNIEnv *env, jclass type, jint index)
     {
         LAppLive2DManager *l2d = LAppLive2DManager::GetInstance();
         LAppModel *model = l2d->GetModel();
@@ -186,7 +280,7 @@ extern "C"
     }
 
     JNIEXPORT jint JNICALL
-    Java_com_live2d_demo_JniBridgeJava_nativeGetExpressionSize(JNIEnv *env, jclass type)
+    class_name(GetExpressionSize)(JNIEnv *env, jclass type)
     {
         LAppLive2DManager *l2d = LAppLive2DManager::GetInstance();
         LAppModel *model = l2d->GetModel();
@@ -195,7 +289,7 @@ extern "C"
     }
 
     JNIEXPORT jint JNICALL
-    Java_com_live2d_demo_JniBridgeJava_nativeGetMotionSize(JNIEnv *env, jclass type)
+    class_name(GetMotionSize)(JNIEnv *env, jclass type)
     {
         LAppLive2DManager *l2d = LAppLive2DManager::GetInstance();
         LAppModel *model = l2d->GetModel();
@@ -208,7 +302,7 @@ extern "C"
     }
 
     JNIEXPORT void JNICALL
-    Java_com_live2d_demo_JniBridgeJava_nativeStartMotion(JNIEnv *env, jclass type, jbyteArray group, jint no, jint priority)
+    class_name(StartMotion)(JNIEnv *env, jclass type, jbyteArray group, jint no, jint priority)
     {
         LAppLive2DManager *l2d = LAppLive2DManager::GetInstance();
         LAppModel *model = l2d->GetModel();
@@ -230,7 +324,7 @@ extern "C"
     }
 
     JNIEXPORT void JNICALL
-    Java_com_live2d_demo_JniBridgeJava_nativeStartExpressions(JNIEnv *env, jclass type, jbyteArray name)
+    class_name(StartExpressions)(JNIEnv *env, jclass type, jbyteArray name)
     {
         LAppLive2DManager *l2d = LAppLive2DManager::GetInstance();
         LAppModel *model = l2d->GetModel();
@@ -252,61 +346,61 @@ extern "C"
     }
 
     JNIEXPORT void JNICALL
-    Java_com_live2d_demo_JniBridgeJava_nativeOnStart(JNIEnv *env, jclass type)
+    class_name(OnStart)(JNIEnv *env, jclass type)
     {
         LAppDelegate::GetInstance()->OnStart();
     }
 
     JNIEXPORT void JNICALL
-    Java_com_live2d_demo_JniBridgeJava_nativeOnStop(JNIEnv *env, jclass type)
+    class_name(OnStop)(JNIEnv *env, jclass type)
     {
         LAppDelegate::GetInstance()->OnStop();
     }
 
     JNIEXPORT void JNICALL
-    Java_com_live2d_demo_JniBridgeJava_nativeOnDestroy(JNIEnv *env, jclass type)
+    class_name(OnDestroy)(JNIEnv *env, jclass type)
     {
         LAppDelegate::GetInstance()->OnDestroy();
     }
 
     JNIEXPORT void JNICALL
-    Java_com_live2d_demo_JniBridgeJava_nativeOnSurfaceCreated(JNIEnv *env, jclass type)
+    class_name(OnSurfaceCreated)(JNIEnv *env, jclass type)
     {
         LAppDelegate::GetInstance()->OnSurfaceCreate();
     }
 
     JNIEXPORT void JNICALL
-    Java_com_live2d_demo_JniBridgeJava_nativeOnSurfaceChanged(JNIEnv *env, jclass type, jint width, jint height)
+    class_name(OnSurfaceChanged)(JNIEnv *env, jclass type, jint width, jint height)
     {
         LAppDelegate::GetInstance()->OnSurfaceChanged(width, height);
     }
 
     JNIEXPORT void JNICALL
-    Java_com_live2d_demo_JniBridgeJava_nativeOnDrawFrame(JNIEnv *env, jclass type)
+    class_name(OnDrawFrame)(JNIEnv *env, jclass type)
     {
         LAppDelegate::GetInstance()->Run();
     }
 
     JNIEXPORT void JNICALL
-    Java_com_live2d_demo_JniBridgeJava_nativeOnTouchesBegan(JNIEnv *env, jclass type, jfloat pointX, jfloat pointY)
+    class_name(OnTouchesBegan)(JNIEnv *env, jclass type, jfloat pointX, jfloat pointY)
     {
         LAppDelegate::GetInstance()->OnTouchBegan(pointX, pointY);
     }
 
     JNIEXPORT void JNICALL
-    Java_com_live2d_demo_JniBridgeJava_nativeOnTouchesEnded(JNIEnv *env, jclass type, jfloat pointX, jfloat pointY)
+    class_name(OnTouchesEnded)(JNIEnv *env, jclass type, jfloat pointX, jfloat pointY)
     {
         LAppDelegate::GetInstance()->OnTouchEnded(pointX, pointY);
     }
 
     JNIEXPORT void JNICALL
-    Java_com_live2d_demo_JniBridgeJava_nativeOnTouchesMoved(JNIEnv *env, jclass type, jfloat pointX, jfloat pointY)
+    class_name(OnTouchesMoved)(JNIEnv *env, jclass type, jfloat pointX, jfloat pointY)
     {
         LAppDelegate::GetInstance()->OnTouchMoved(pointX, pointY);
     }
 
     JNIEXPORT void JNICALL
-    Java_com_live2d_demo_JniBridgeJava_nativeSetPos(JNIEnv *env, jclass type, jfloat pointX, jfloat pointY)
+    class_name(SetPos)(JNIEnv *env, jclass type, jfloat pointX, jfloat pointY)
     {
         LAppLive2DManager *manager = LAppLive2DManager::GetInstance();
         manager->x = pointX;
@@ -314,21 +408,21 @@ extern "C"
     }
 
     JNIEXPORT void JNICALL
-    Java_com_live2d_demo_JniBridgeJava_nativeSetScale(JNIEnv *env, jclass type, jfloat scale)
+    class_name(SetScale)(JNIEnv *env, jclass type, jfloat scale)
     {
         LAppLive2DManager *manager = LAppLive2DManager::GetInstance();
         manager->scale = scale;
     }
 
     JNIEXPORT void JNICALL
-    Java_com_live2d_demo_JniBridgeJava_nativeSetPosX(JNIEnv *env, jclass type, jfloat data)
+    class_name(SetPosX)(JNIEnv *env, jclass type, jfloat data)
     {
         LAppLive2DManager *manager = LAppLive2DManager::GetInstance();
         manager->x = data;
     }
 
     JNIEXPORT void JNICALL
-    Java_com_live2d_demo_JniBridgeJava_nativeSetPosY(JNIEnv *env, jclass type, jfloat data)
+    class_name(SetPosY)(JNIEnv *env, jclass type, jfloat data)
     {
         LAppLive2DManager *manager = LAppLive2DManager::GetInstance();
         manager->y = data;

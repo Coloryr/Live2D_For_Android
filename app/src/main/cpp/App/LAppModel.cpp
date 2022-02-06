@@ -53,7 +53,7 @@ LAppModel::LAppModel()
     {
         _debugMode = true;
     }
-
+    
     _idParamAngleX = CubismFramework::GetIdManager()->GetId(ParamAngleX);
     _idParamAngleY = CubismFramework::GetIdManager()->GetId(ParamAngleY);
     _idParamAngleZ = CubismFramework::GetIdManager()->GetId(ParamAngleZ);
@@ -80,6 +80,36 @@ LAppModel::~LAppModel()
 void LAppModel::SetBreath(Csm::csmString id)
 {
     _idParamBraeth = CubismFramework::GetIdManager()->GetId(id);
+}
+
+void LAppModel::SetEyeBallX(Csm::csmString id)
+{
+    _idParamEyeBallX = CubismFramework::GetIdManager()->GetId(id);
+}
+
+void LAppModel::SetEyeBallY(Csm::csmString id)
+{
+    _idParamEyeBallY = CubismFramework::GetIdManager()->GetId(id);
+}
+
+void LAppModel::SetBodyAngleX(Csm::csmString id)
+{
+    _idParamBodyAngleX = CubismFramework::GetIdManager()->GetId(id);
+}
+
+void LAppModel::SetAngleX(Csm::csmString id)
+{
+    _idParamAngleX = CubismFramework::GetIdManager()->GetId(id);
+}
+
+void LAppModel::SetAngleY(Csm::csmString id)
+{
+    _idParamAngleY = CubismFramework::GetIdManager()->GetId(id);
+}
+
+void LAppModel::SetAngleZ(Csm::csmString id)
+{
+    _idParamAngleZ = CubismFramework::GetIdManager()->GetId(id);
 }
 
 void LAppModel::SetEnableRandomMotion(bool open)
