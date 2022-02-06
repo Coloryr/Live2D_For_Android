@@ -122,11 +122,6 @@ public:
     int GetWindowHeight() { return _height; }
 
     /**
-    * @brief   アプリケーションを非アクティブにする。
-    */
-    void DeActivateApp() { _isActive = false; }
-
-    /**
     * @brief   View情報を取得する。
     */
     LAppView* GetView() { return _view; }
@@ -158,7 +153,6 @@ private:
     int _width;                                  ///< Windowの幅
     int _height;                                 ///< windowの高さ
     bool _captured;                              ///< クリックしているか
-    bool _isActive;                              ///< アプリがアクティブ状態なのか
     float _mouseY;                               ///< マウスY座標
     float _mouseX;                               ///< マウスX座標
 };

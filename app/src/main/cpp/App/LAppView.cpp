@@ -27,7 +27,8 @@ using namespace LAppDefine;
 
 LAppView::LAppView() : _programId(0),
                        _renderSprite(NULL),
-                       _renderTarget(SelectTarget_None)
+                       _renderTarget(SelectTarget_None),
+                       run(false)
 {
     _clearColor[0] = 1.0f;
     _clearColor[1] = 1.0f;
@@ -121,8 +122,13 @@ void LAppView::InitializeSprite()
 
 void LAppView::Render()
 {
-
+    run = true;
     LAppLive2DManager *Live2DManager = LAppLive2DManager::GetInstance();
+
+    if(Live2DManager->NeedLoad())
+    {
+        Live2DManager->InitModel();
+    }
 
     Live2DManager->SetViewMatrix(_viewMatrix);
 
@@ -153,6 +159,7 @@ void LAppView::Render()
             _renderSprite->RenderImmidiate(model->GetRenderBuffer().GetColorBuffer(), uvVertex);
         }
     }
+    run = false;
 }
 
 void LAppView::OnTouchesBegan(float pointX, float pointY) const

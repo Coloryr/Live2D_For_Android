@@ -14,6 +14,7 @@
 #include "LAppDelegate.hpp"
 #include "LAppModel.hpp"
 #include "LAppView.hpp"
+#include "JniBridgeC.hpp"
 
 using namespace Csm;
 using namespace LAppDefine;
@@ -53,7 +54,7 @@ LAppLive2DManager::LAppLive2DManager()
     : _viewMatrix(NULL),
       x(0.0f), y(0.0f), scale(1.0f),
       path(NULL), name(NULL),
-      _model(NULL)
+      _model(NULL), loading(false)
 {
     _viewMatrix = new CubismMatrix44();
 }
@@ -108,6 +109,9 @@ void LAppLive2DManager::OnTap(csmFloat32 x, csmFloat32 y)
 
 void LAppLive2DManager::OnUpdate() const
 {
+    if (this->_model == NULL)
+        return;
+
     int width = LAppDelegate::GetInstance()->GetWindowWidth();
     int height = LAppDelegate::GetInstance()->GetWindowHeight();
 
@@ -144,6 +148,16 @@ void LAppLive2DManager::OnUpdate() const
 
 void LAppLive2DManager::LoadModel(Csm::csmString path, Csm::csmString name)
 {
+    if (this->path)
+    {
+        delete[] this->path;
+    }
+
+    if (this->name)
+    {
+        delete[] this->name;
+    }
+
     // ModelDir[]に保持したディレクトリ名から
     // model3.jsonのパスを決定する.
     // ディレクトリ名とmodel3.jsonの名前を一致させておくこと.
@@ -155,16 +169,6 @@ void LAppLive2DManager::LoadModel(Csm::csmString path, Csm::csmString name)
         LAppPal::PrintLog("[APP]model load: %s%s", modelPath.GetRawString(), modelJsonName.GetRawString());
     }
 
-    if (this->path)
-    {
-        delete[] this->path;
-    }
-
-    if (this->name)
-    {
-        delete[] this->name;
-    }
-
     int length = modelPath.GetLength() + 1;
     this->path = new char[length];
     strncpy(this->path, modelPath.GetRawString(), length);
@@ -173,13 +177,17 @@ void LAppLive2DManager::LoadModel(Csm::csmString path, Csm::csmString name)
     this->name = new char[length];
     strncpy(this->name, modelJsonName.GetRawString(), length);
 
-    ReleaseAllModel();
-
-    this->_model = new LAppModel();
+    this->loading = true;
 }
 
 void LAppLive2DManager::InitModel()
 {
+    ReleaseAllModel();
+
+    this->_model = new LAppModel();
+
+    JniBridgeC::OnLoadModel(this->name);
+
     this->_model->LoadAssets((const char *)this->path, (const char *)this->name);
 
     /*
@@ -205,6 +213,8 @@ void LAppLive2DManager::InitModel()
         float clearColor[3] = {1.0f, 1.0f, 1.0f};
         LAppDelegate::GetInstance()->GetView()->SetRenderTargetClearColor(clearColor[0], clearColor[1], clearColor[2]);
     }
+
+    this->loading = false;
 }
 
 void LAppLive2DManager::SetViewMatrix(CubismMatrix44 *m)

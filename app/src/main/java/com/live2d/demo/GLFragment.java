@@ -16,6 +16,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 public class GLFragment extends Fragment {
@@ -23,6 +24,7 @@ public class GLFragment extends Fragment {
     private CoordinatorLayout constraintLayout;
     private Button button;
     private Button button1;
+    private Button button2;
 
     private EditText x;
     private EditText y;
@@ -38,6 +40,7 @@ public class GLFragment extends Fragment {
         constraintLayout = root.findViewById(R.id.gl_root);
         button = root.findViewById(R.id.show_button);
         button1 = root.findViewById(R.id.button_floating);
+        button2 = root.findViewById(R.id.button_load);
 
         x = root.findViewById(R.id.x);
         y = root.findViewById(R.id.y);
@@ -157,7 +160,17 @@ public class GLFragment extends Fragment {
             }
         });
 
-
+        button2.setOnClickListener(v -> {
+            try {
+                JniBridgeJava.LoadModel("Haru", "Haru");
+                JniBridgeJava.nativeEnableRandomMotion(false);
+                JniBridgeJava.nativeSetBreath("PARAM_BREATH".getBytes(StandardCharsets.UTF_8));
+                JniBridgeJava.nativeSetScale(1f);
+                GLRenderer.isLoad = true;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
         return root;
     }
 }

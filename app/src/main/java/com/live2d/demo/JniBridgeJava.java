@@ -66,8 +66,6 @@ public class JniBridgeJava {
 
     public static native void nativeLoadModel(byte[] path, byte[] name);
 
-    public static native void nativeInitModel();
-
     public static native void nativeEnableRandomMotion(boolean enable);
 
     public static native void nativeSetBreath(byte[] id);
@@ -157,13 +155,18 @@ public class JniBridgeJava {
         }
     }
 
-    public static void MoveTaskToBack() {
-
-    }
-
     public static void LoadModel(String path, String name) {
         byte[] path1 = path.getBytes(StandardCharsets.UTF_8);
         byte[] name1 = name.getBytes(StandardCharsets.UTF_8);
         nativeLoadModel(path1, name1);
+    }
+
+    public static void onLoadModel(String name) {
+        if (name.equals("shizuku.model3.json")) {
+            JniBridgeJava.nativeSetBreath("PARAM_BREATH".getBytes(StandardCharsets.UTF_8));
+            JniBridgeJava.nativeEnableRandomMotion(false);
+        } else {
+            JniBridgeJava.nativeEnableRandomMotion(true);
+        }
     }
 }

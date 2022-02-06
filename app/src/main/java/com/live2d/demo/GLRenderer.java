@@ -16,25 +16,22 @@ import java.nio.charset.StandardCharsets;
 
 public class GLRenderer implements GLSurfaceView.Renderer {
 
+    public static boolean isLoad = false;
+
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-        GLES20.glClearColor(0f, 0f, 0f, 0f);
         JniBridgeJava.nativeOnSurfaceCreated();
     }
 
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
         JniBridgeJava.nativeOnSurfaceChanged(width, height);
-        //JniBridgeJava.LoadModel("sizuku", "shizuku");
-        //JniBridgeJava.nativeEnableRandomMotion(false);
-        //JniBridgeJava.nativeSetBreath("PARAM_BREATH".getBytes(StandardCharsets.UTF_8));
-        //JniBridgeJava.nativeInitModel();
-        //JniBridgeJava.nativeSetScale(1f);
-
+        JniBridgeJava.LoadModel("sizuku", "shizuku");
     }
 
     @Override
     public void onDrawFrame(GL10 gl) {
+        //if(isLoad)
         JniBridgeJava.nativeOnDrawFrame();
     }
 }

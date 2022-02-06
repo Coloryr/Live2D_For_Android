@@ -146,6 +146,8 @@ public:
      */
     void SetRenderTargetClearColor(float r, float g, float b);
 
+    bool isRun(){return run;}
+
 private:
     TouchManager* _touchManager;                 ///< タッチマネージャー
     Csm::CubismMatrix44* _deviceToScreen;    ///< デバイスからスクリーンへの行列
@@ -157,4 +159,5 @@ private:
     Csm::Rendering::CubismOffscreenFrame_OpenGLES2 _renderBuffer;   ///< モードによってはCubismモデル結果をこっちにレンダリング
     SelectTarget _renderTarget;     ///< レンダリング先の選択肢
     float _clearColor[4];           ///< レンダリングターゲットのクリアカラー
+    bool run;
 };

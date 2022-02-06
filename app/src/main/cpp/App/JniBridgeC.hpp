@@ -21,5 +21,5 @@ public:
     /**
     * @brief アプリをバックグラウンドに移動
     */
-    static void MoveTaskToBack();
+    static void OnLoadModel(char*name);
 };

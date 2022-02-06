@@ -92,6 +92,8 @@ public:
     float y;
     float scale;
 
+    bool NeedLoad(){return loading;}
+
 private:
     /**
      * @brief  コンストラクタ
@@ -107,4 +109,5 @@ private:
     char *name;
     Csm::CubismMatrix44 *_viewMatrix; ///< モデル描画に用いるView行列
     LAppModel *_model;                ///< モデルインスタンスのコンテナ
+    bool loading;
 };

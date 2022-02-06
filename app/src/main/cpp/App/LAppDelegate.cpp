@@ -19,11 +19,12 @@ using namespace Csm;
 using namespace std;
 using namespace LAppDefine;
 
-namespace {
-    LAppDelegate* s_instance = NULL;
+namespace
+{
+    LAppDelegate *s_instance = NULL;
 }
 
-LAppDelegate* LAppDelegate::GetInstance()
+LAppDelegate *LAppDelegate::GetInstance()
 {
     if (s_instance == NULL)
     {
@@ -42,7 +43,6 @@ void LAppDelegate::ReleaseInstance()
 
     s_instance = NULL;
 }
-
 
 void LAppDelegate::OnStart()
 {
@@ -91,11 +91,6 @@ void LAppDelegate::Run()
     {
         _view->Render();
     }
-
-    if(_isActive == false)
-    {
-        JniBridgeC::MoveTaskToBack();
-    }
 }
 
 void LAppDelegate::OnSurfaceCreate()
@@ -108,7 +103,7 @@ void LAppDelegate::OnSurfaceCreate()
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    //Initialize cubism
+    // Initialize cubism
     CubismFramework::Initialize();
 
     _view->InitializeShader();
@@ -120,16 +115,14 @@ void LAppDelegate::OnSurfaceChanged(float width, float height)
     _width = width;
     _height = height;
 
-    //AppViewの初期化
+    // AppViewの初期化
     _view->Initialize();
     _view->InitializeSprite();
-
-    _isActive = true;
 }
 
 void LAppDelegate::LoadModel(Csm::csmString path, Csm::csmString name)
 {
-    //load model
+    // load model
     LAppLive2DManager::GetInstance()->LoadModel(path, name);
 }
 
@@ -138,14 +131,12 @@ void LAppDelegate::InitModel()
     LAppLive2DManager::GetInstance()->InitModel();
 }
 
-LAppDelegate::LAppDelegate():
-    _cubismOption(),
-    _captured(false),
-    _mouseX(0.0f),
-    _mouseY(0.0f),
-    _isActive(true),
-    _textureManager(NULL),
-    _view(NULL)
+LAppDelegate::LAppDelegate() : _cubismOption(),
+                               _captured(false),
+                               _mouseX(0.0f),
+                               _mouseY(0.0f),
+                               _textureManager(NULL),
+                               _view(NULL)
 {
     // Setup Cubism
     _cubismOption.LogFunction = LAppPal::PrintMessage;
@@ -197,7 +188,7 @@ GLuint LAppDelegate::CreateShader()
 {
     //バーテックスシェーダのコンパイル
     GLuint vertexShaderId = glCreateShader(GL_VERTEX_SHADER);
-    const char* vertexShader =
+    const char *vertexShader =
         "#version 100\n"
         "attribute vec3 position;"
         "attribute vec2 uv;"
@@ -211,7 +202,7 @@ GLuint LAppDelegate::CreateShader()
 
     //フラグメントシェーダのコンパイル
     GLuint fragmentShaderId = glCreateShader(GL_FRAGMENT_SHADER);
-    const char* fragmentShader =
+    const char *fragmentShader =
         "#version 100\n"
         "precision mediump float;"
         "varying vec2 vuv;"

@@ -20,7 +20,7 @@ using namespace Csm;
 static JavaVM *g_JVM; // JavaVM is valid for all threads, so just save it globally
 static jclass g_JniBridgeJavaClass;
 static jmethodID g_LoadFileMethodId;
-static jmethodID g_MoveTaskToBackMethodId;
+static jmethodID g_OnLoadModelMethodId;
 
 JNIEnv *GetEnv()
 {
@@ -43,7 +43,7 @@ jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved)
     jclass clazz = env->FindClass("com/live2d/demo/JniBridgeJava");
     g_JniBridgeJavaClass = reinterpret_cast<jclass>(env->NewGlobalRef(clazz));
     g_LoadFileMethodId = env->GetStaticMethodID(g_JniBridgeJavaClass, "LoadFile", "(Ljava/lang/String;)[B");
-    g_MoveTaskToBackMethodId = env->GetStaticMethodID(g_JniBridgeJavaClass, "MoveTaskToBack", "()V");
+    g_OnLoadModelMethodId = env->GetStaticMethodID(g_JniBridgeJavaClass, "onLoadModel", "(Ljava/lang/String;)V");
 
     return JNI_VERSION_1_6;
 }
@@ -68,12 +68,12 @@ char *JniBridgeC::LoadFileAsBytesFromJava(const char *filePath, unsigned int *ou
     return buffer;
 }
 
-void JniBridgeC::MoveTaskToBack()
+void JniBridgeC::OnLoadModel(char *name)
 {
     JNIEnv *env = GetEnv();
-
-    // アプリ終了
-    env->CallStaticVoidMethod(g_JniBridgeJavaClass, g_MoveTaskToBackMethodId, NULL);
+    jstring str_arg = env->NewStringUTF(name);
+    env->CallStaticVoidMethod(g_JniBridgeJavaClass, g_OnLoadModelMethodId, str_arg);
+    env->DeleteLocalRef(str_arg);
 }
 
 extern "C"
@@ -115,13 +115,6 @@ extern "C"
         {
             model->SetBreath(id1);
         }
-    }
-
-    JNIEXPORT void JNICALL
-    Java_com_live2d_demo_JniBridgeJava_nativeInitModel(JNIEnv *env, jclass type)
-    {
-        LAppLive2DManager *l2d = LAppLive2DManager::GetInstance();
-        l2d->InitModel();
     }
 
     JNIEXPORT void JNICALL
