@@ -23,7 +23,7 @@ static jmethodID g_LoadFileMethodId;
 static jmethodID g_OnLoadModelMethodId;
 
 #define class_name(F) Java_com_live2d_demo_JniBridgeJava_native##F
-#define class_name "com/live2d/demo/JniBridgeJava"
+#define class_local "com/live2d/demo/JniBridgeJava"
 
 JNIEnv *GetEnv()
 {
@@ -43,7 +43,7 @@ jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved)
         return JNI_ERR;
     }
 
-    jclass clazz = env->FindClass(class_name);
+    jclass clazz = env->FindClass(class_local);
     g_JniBridgeJavaClass = reinterpret_cast<jclass>(env->NewGlobalRef(clazz));
     g_LoadFileMethodId = env->GetStaticMethodID(g_JniBridgeJavaClass, "LoadFile", "(Ljava/lang/String;)[B");
     g_OnLoadModelMethodId = env->GetStaticMethodID(g_JniBridgeJavaClass, "onLoadModel", "(Ljava/lang/String;)V");
