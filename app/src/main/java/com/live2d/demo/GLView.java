@@ -6,12 +6,15 @@ import android.graphics.PixelFormat;
 import android.opengl.GLSurfaceView;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 
 @SuppressLint("ViewConstructor")
-public class GLView extends GLSurfaceView{
+public class GLView extends GLSurfaceView {
     private GLRenderer _glRenderer;
+    private Context context;
 
-    public final MainActivity.MyTouchListener myTouchListener = event -> {
+    @SuppressLint("ClickableViewAccessibility")
+    public final OnTouchListener myTouchListener = (v, event) -> {
         //处理手势事件（根据个人需要去返回和逻辑的处理）
         float pointX = event.getX();
         float pointY = event.getY();
@@ -30,11 +33,12 @@ public class GLView extends GLSurfaceView{
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return false;
     };
 
     public GLView(Context context) {
         super(context);
-        JniBridgeJava.SetContext(context);
+        this.context = context;
         setEGLConfigChooser(8, 8, 8, 8, 16, 0);
         getHolder().setFormat(PixelFormat.TRANSLUCENT);
         setZOrderOnTop(true);
@@ -47,15 +51,15 @@ public class GLView extends GLSurfaceView{
         JniBridgeJava.nativeOnStart();
     }
 
-    public void Stop() {
+    public void callAdd(ViewGroup view) {
+        JniBridgeJava.nativeOnStart();
+        JniBridgeJava.SetContext(context);
+        view.addView(this);
+        view.setOnTouchListener(myTouchListener);
+    }
+
+    public void remove(ViewGroup view) {
+        view.removeView(this);
         JniBridgeJava.nativeOnStop();
-    }
-
-    public void Destroy() {
-        JniBridgeJava.nativeOnDestroy();
-    }
-
-    public void DestroyView() {
-        MainActivity.app.unRegisterMyTouchListener(myTouchListener);
     }
 }

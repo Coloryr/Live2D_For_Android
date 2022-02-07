@@ -92,7 +92,7 @@ public class FloatingService extends Service {
             top = view;
             int pointerCount = event.getPointerCount();
             if (pointerCount == 1) {
-                MainActivity.glView.myTouchListener.onTouchEvent(event);
+                MainActivity.glView.myTouchListener.onTouch(view, event);
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         x = (int) event.getRawX();

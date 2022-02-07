@@ -112,7 +112,7 @@ public class GLFragment extends Fragment {
 
         button.setOnClickListener(v -> {
             JniBridgeJava.ChangeModel();
-            constraintLayout.addView(MainActivity.glView);
+            MainActivity.glView.callAdd(constraintLayout);
         });
 
 //        button1.setOnClickListener(v -> {
